@@ -1,0 +1,272 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0a12;
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+/* ---------- SCENE CONTAINER ---------- */
+#scene {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, #0a0a1a 0%, #050510 100%);
+  transition: background 2s ease;
+  z-index: 0;
+}
+
+/* ---------- CANVAS LAYER ---------- */
+#universeCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* ---------- UI OVERLAY ---------- */
+#uiOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  pointer-events: none;
+  transition: opacity 1.5s ease;
+}
+#uiOverlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- INPUT PANEL ---------- */
+.input-panel {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 32px;
+  padding: 48px 40px 40px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  pointer-events: auto;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+  animation: floatIn 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes floatIn {
+  0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.input-panel .icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  animation: pulseGlow 2.8s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(108, 99, 255, 0.3)); }
+  50% { filter: drop-shadow(0 0 60px rgba(108, 99, 255, 0.6)); }
+}
+
+.input-panel h1 {
+  color: #f0ecff;
+  font-size: 2.2rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  font-family: 'Georgia', serif;
+}
+.input-panel h1 strong {
+  font-weight: 700;
+  background: linear-gradient(135deg, #6c63ff, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.input-panel .sub {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.85rem;
+  margin-bottom: 28px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.input-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+.input-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.input-group input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f0ecff;
+  font-size: 1.05rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+  font-family: inherit;
+}
+.input-group input:focus {
+  border-color: rgba(108, 99, 255, 0.4);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+}
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-generate {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6c63ff, #8b7cf7);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-generate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.35);
+}
+.btn-generate:active {
+  transform: scale(0.97);
+}
+.btn-generate .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0);
+  animation: rippleAnim 0.8s ease-out forwards;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+.form-error {
+  color: #f87171;
+  font-size: 0.8rem;
+  min-height: 24px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-top: 4px;
+}
+.form-error.visible {
+  opacity: 1;
+}
+
+/* ---------- SECRET ENDING ---------- */
+#secretEnding {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 3s ease;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+#secretEnding.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+#secretEnding .text {
+  font-family: 'Georgia', serif;
+  font-size: clamp(1.2rem, 4vw, 2.4rem);
+  color: #f0ecff;
+  text-align: center;
+  max-width: 600px;
+  padding: 30px;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  animation: fadeInText 4s ease forwards;
+  text-shadow: 0 0 60px rgba(108, 99, 255, 0.2);
+}
+@keyframes fadeInText {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- EASTER EGG HINT ---------- */
+#easterEggHint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  color: rgba(255, 255, 255, 0.08);
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  pointer-events: none;
+  font-weight: 300;
+  transition: opacity 2s ease;
+}
+
+/* ---------- TOAST ---------- */
+.toast-aurora {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  color: #f0ecff;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  z-index: 200;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(-50%) translateY(20px);
+}
+.toast-aurora.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 480px) {
+  .input-panel {
+    padding: 32px 20px 28px;
+    border-radius: 24px;
+  }
+  .input-panel h1 {
+    font-size: 1.7rem;
+  }
+}
