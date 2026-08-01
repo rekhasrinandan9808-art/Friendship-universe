@@ -1,54 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Aurora ✦ A Friendship Universe</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Friendship Day 💙</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- SCENE CONTAINER -->
-  <div id="scene"></div>
+    <!-- ─── Confetti Canvas ─── -->
+    <canvas id="confetti-canvas"></canvas>
 
-  <!-- UNIVERSE CANVAS -->
-  <canvas id="universeCanvas"></canvas>
+    <!-- ─── Rain Canvas ─── -->
+    <canvas id="rain-canvas"></canvas>
 
-  <!-- UI OVERLAY -->
-  <div id="uiOverlay">
-    <div class="input-panel">
-      <div class="icon">🌌</div>
-      <h1>Project <strong>Aurora</strong></h1>
-      <p class="sub">A Friendship Universe</p>
+    <!-- ─── Main Card ─── -->
+    <div class="glass-card" id="app">
 
-      <form id="nameForm">
-        <div class="input-group">
-          <label for="name1">Your name</label>
-          <input type="text" id="name1" placeholder="Enter your name" maxlength="30" autocomplete="off" />
+        <!-- ====== STEP 1: ENTER NAMES ====== -->
+        <div class="step active" id="step-names">
+            <div class="text-center">
+                <span class="emoji-big">💙</span>
+                <h1>Friendship Day</h1>
+                <p class="subtitle">A little something for a special someone</p>
+            </div>
+
+            <div class="input-group">
+                <label>Enter your names</label>
+                <div class="input-row">
+                    <input type="text" id="name1" placeholder="Your name" value="Nandan" />
+                    <input type="text" id="name2" placeholder="Their name" value="Rishitha" />
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-generate">
+                ✨ Open Your Surprise
+            </button>
+            <p class="note">Some friendships make life more beautiful.</p>
         </div>
-        <div class="input-group">
-          <label for="name2">Friend's name</label>
-          <input type="text" id="name2" placeholder="Enter friend's name" maxlength="30" autocomplete="off" />
+
+        <!-- ====== STEP 2: CARD FLIP + SURPRISE ====== -->
+        <div class="step" id="step-surprise">
+            <div class="text-center">
+                <span class="emoji-big" id="surprise-emoji">💌</span>
+                <h2 style="font-size:1.4rem; font-weight:400;" id="surprise-title">A message for you</h2>
+            </div>
+
+            <div class="card-flip-wrapper">
+                <div class="card-flip-inner" id="cardFlip">
+                    <div class="card-face card-face-front">
+                        <h2>✨<br />Tap to reveal</h2>
+                        <span class="sub">A little surprise awaits</span>
+                    </div>
+                    <div class="card-face card-face-back" id="cardBack">
+                        <h2 id="surprise-message">💙<br />You make life <span class="highlight">beautiful</span></h2>
+                        <span class="sub" id="surprise-from">— from your bestie</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" id="btn-flip">👆 Flip Card</button>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="btn-next-timeline">⏳ Our Timeline →</button>
+            </div>
         </div>
-        <div class="form-error" id="formError">✨ Both names are needed to create a universe</div>
-        <button type="submit" class="btn-generate" id="generateBtn">
-          <span>✦ Create Universe ✦</span>
-        </button>
-      </form>
+
+        <!-- ====== STEP 3: TIMELINE ====== -->
+        <div class="step" id="step-timeline">
+            <div class="text-center">
+                <span class="emoji-big">✨</span>
+                <h2 style="font-size:1.3rem; font-weight:400;">Friendship Timeline</h2>
+            </div>
+
+            <div class="timeline" id="timelineContainer">
+                <div class="timeline-item">
+                    <div class="year">Day 1</div>
+                    <div class="event"><span class="name-highlight blue" id="tl-name1">Nandan</span> met <span class="name-highlight pink" id="tl-name2">Rishitha</span></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Soon after</div>
+                    <div class="event">💬 A beautiful friendship began</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Along the way</div>
+                    <div class="event">😂 Countless laughs were shared</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Through it all</div>
+                    <div class="event">🤝 Trust grew stronger every day</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Today</div>
+                    <div class="event">💙 Happy Friendship Day</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">∞ Forever</div>
+                    <div class="event">✨ More memories are waiting...</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-next-infinity">∞ Infinity Status →</button>
+        </div>
+
+        <!-- ====== STEP 4: INFINITY STATUS ====== -->
+        <div class="step" id="step-infinity">
+            <div class="infinity-status" id="infinityBox">
+                <div class="stars" id="starsContainer"></div>
+
+                <div class="badge">╭────────────────────────────╮<br />&nbsp;&nbsp;Friendship Status&nbsp;&nbsp;<br />╰────────────────────────────╯</div>
+
+                <div class="duo">
+                    <span class="name-blue" id="inf-name1">Nandan</span>
+                    <span class="heart-icon">🤝</span>
+                    <span class="name-pink" id="inf-name2">Rishitha</span>
+                </div>
+
+                <hr class="divider" />
+
+                <div class="expires">
+                    <div class="num"><span id="exp-years">∞</span> Years</div>
+                    <div class="num"><span id="exp-months">∞</span> Months</div>
+                    <div class="num"><span id="exp-days">∞</span> Days</div>
+                    <div class="num"><span id="exp-hours">∞</span> Hours</div>
+                    <div class="num"><span id="exp-mins">∞</span> Minutes</div>
+                    <div class="num"><span id="exp-secs">∞</span> Seconds</div>
+                </div>
+
+                <hr class="divider" />
+
+                <div class="forever">💙 FOREVER 💙</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="btn-download">⬇️ Download Card</button>
+                <button class="btn btn-secondary" id="btn-share">🔗 Share</button>
+                <button class="btn btn-secondary" id="btn-restart">↺ Make another</button>
+            </div>
+            <p class="note" style="margin-top:12px;">💫 Made with love for two besties</p>
+        </div>
+
     </div>
-  </div>
 
-  <!-- SECRET ENDING -->
-  <div id="secretEnding">
-    <div class="text">
-      "Some friendships aren't written in books...<br>
-      they're written across the universe."
-    </div>
-  </div>
-
-  <!-- EASTER EGG HINT -->
-  <div id="easterEggHint">✦ tap the stars ✦</div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
