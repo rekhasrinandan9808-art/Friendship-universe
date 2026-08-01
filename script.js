@@ -37,8 +37,17 @@ let name2 = 'Rishitha';
 // 3. UTILITY: switch steps
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function showStep(stepId) {
-    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-    document.getElementById(stepId).classList.add('active');
+    // Hide all steps
+    document.querySelectorAll('.step').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+    });
+    // Show the target step
+    const target = document.getElementById(stepId);
+    target.style.display = 'block';
+    // Force reflow for animation
+    void target.offsetHeight;
+    target.classList.add('active');
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -145,13 +154,11 @@ class RainDrop {
         this.size = Math.random() * 20 + 16;
         this.speed = Math.random() * 1.2 + 0.6;
 
-        // pick word: 40% chance name1, 40% name2, 20% random
         const r = Math.random();
         if (r < 0.4) this.text = name1;
         else if (r < 0.8) this.text = name2;
         else this.text = rainWords[Math.floor(Math.random() * rainWords.length)];
 
-        // color glow
         if (this.text === name1) this.color = 'rgba(138, 180, 255, 0.7)';
         else if (this.text === name2) this.color = 'rgba(245, 139, 203, 0.7)';
         else this.color = 'rgba(255,255,255,0.35)';
@@ -170,14 +177,10 @@ class RainDrop {
         ctxRain.font = `${this.size}px "Inter", sans-serif`;
         ctxRain.textAlign = 'center';
         ctxRain.textBaseline = 'middle';
-
-        // glow shadow
         ctxRain.shadowColor = this.color;
         ctxRain.shadowBlur = 30;
-
         ctxRain.fillStyle = this.color;
         ctxRain.fillText(this.text, this.x, this.y);
-
         ctxRain.restore();
     }
 }
@@ -233,7 +236,9 @@ generateStars();
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 // ── Generate Surprise ──
-btnGenerate.addEventListener('click', () => {
+btnGenerate.addEventListener('click', function(e) {
+    e.preventDefault();
+    
     name1 = name1Input.value.trim() || 'You';
     name2 = name2Input.value.trim() || 'Them';
 
@@ -258,6 +263,7 @@ btnGenerate.addEventListener('click', () => {
 
     // Reset flip
     cardFlip.classList.remove('flipped');
+    btnFlip.textContent = '👆 Flip Card';
 
     // Switch step
     showStep('step-surprise');
@@ -268,7 +274,7 @@ btnGenerate.addEventListener('click', () => {
 });
 
 // ── Flip Card ──
-btnFlip.addEventListener('click', () => {
+btnFlip.addEventListener('click', function() {
     cardFlip.classList.toggle('flipped');
     if (cardFlip.classList.contains('flipped')) {
         btnFlip.textContent = '↩️ Flip Back';
@@ -278,9 +284,8 @@ btnFlip.addEventListener('click', () => {
 });
 
 // ── Next: Timeline ──
-btnNextTimeline.addEventListener('click', () => {
+btnNextTimeline.addEventListener('click', function() {
     showStep('step-timeline');
-    // Start rain on timeline
     startRain();
     // Re-trigger timeline animations
     document.querySelectorAll('.timeline-item').forEach((el, i) => {
@@ -292,21 +297,20 @@ btnNextTimeline.addEventListener('click', () => {
 });
 
 // ── Next: Infinity ──
-btnNextInfinity.addEventListener('click', () => {
+btnNextInfinity.addEventListener('click', function() {
     stopRain();
     showStep('step-infinity');
-    // Keep confetti subtle on final
     startConfetti(80);
     setTimeout(stopConfetti, 3000);
 });
 
 // ── Download ──
-btnDownload.addEventListener('click', () => {
+btnDownload.addEventListener('click', function() {
     alert('📸 To download, take a screenshot of this beautiful card! 💙');
 });
 
 // ── Share ──
-btnShare.addEventListener('click', () => {
+btnShare.addEventListener('click', function() {
     if (navigator.share) {
         navigator.share({
             title: 'Happy Friendship Day 💙',
@@ -321,7 +325,7 @@ btnShare.addEventListener('click', () => {
 });
 
 // ── Restart ──
-btnRestart.addEventListener('click', () => {
+btnRestart.addEventListener('click', function() {
     stopRain();
     stopConfetti();
     showStep('step-names');
@@ -330,17 +334,19 @@ btnRestart.addEventListener('click', () => {
 });
 
 // ── Enter key support ──
-name2Input.addEventListener('keydown', (e) => {
+name2Input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') btnGenerate.click();
 });
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 8. INIT — start with names step
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-showStep('step-names');
-// Pre-fill with defaults
-name1Input.value = 'Nandan';
-name2Input.value = 'Rishitha';
+// Make sure only step-names is visible initially
+document.querySelectorAll('.step').forEach(el => {
+    el.style.display = 'none';
+});
+stepNames.style.display = 'block';
+stepNames.classList.add('active');
 
 console.log('💙 Happy Friendship Day!');
 console.log('✨ Made with love for two besties.');
